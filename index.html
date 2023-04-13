@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script type="text/javascript" src="script.js"></script>
+	<style type="text/css">
+		#input {
+			padding: 5px;
+			border: 1px solid #bbb;
+			margin: 0;
+			font-size: 14px;
+			min-width: 20ch;
+		}
+
+		#done {
+			padding: 5px;
+			height: 80%;
+			border: 1px solid #bbb;
+			background-color: #def;
+			font-size: 12px;
+			border-left: none;
+			outline: none;
+		}
+
+		#done:active {
+			background-color: #bdf;
+		}
+
+		#input:focus {
+			border: 1px solid #888;
+			outline: none;
+		}
+
+		#inputArea {
+			display: flex;
+			flex-flow: row wrap;
+			align-items: center;
+		}
+
+		h1,
+		body {
+			font-family: sans-serif;
+		}
+
+		#ansDiv {
+			border: 1px solid #bbb;
+			padding: 5px;
+			display: none;
+		}
+
+		.typeOf {
+			padding: 3px;
+			border-radius: 2px;
+			background-color: #ddd;
+		}
+
+		.step {
+			margin-bottom: 10px;
+			white-space: nowrap;
+		}
+	</style>
+</head>
+
+<body>
+	<div id="inputArea">
+		<input id="input" value="" placeholder="enter equation here" autocomplete="off" onchange="run()">
+		<input type="button" id="done" value="&check; Evaluate">
+	</div><br>
+	<div id="stepsDiv"></div>
+	<div id="ansDiv"></div>
+	<script type="text/javascript">
+		var input = document.getElementById("input");
+		var stepsDiv = document.getElementById("stepsDiv");
+		var ansDiv = document.getElementById("ansDiv");
+		var button = document.getElementById("done");
+
+		input.value = "((1+(2*x)+1)*(x+1))(x+9)+16";
+		input.style.width = (input.value.length + 1) + "ch";
+		button.onclick = run;
+
+		function run() {
+			ansDiv.style.display = "inline-block";
+			
+			var res = Evaluate(input.value);
+			var steps = [];
+			for (var i = 0; i < res.steps.length; i++) {
+				steps.push("<span class='typeOf'>" + res.steps[i][0] + "</span> " + res.steps[i][1]);
+			}
+			stepsDiv.innerHTML = "<div class='step'>" + steps.join("</div><div class='step'>") + "</div>";
+			ansDiv.innerHTML = res.ans.replace(/x+/g, m => m.length > 1 ? `${m[0]}<sup>${m.length}</sup>` : m[0]);
+		}
+
+	</script>
+</body>
+
+</html>
